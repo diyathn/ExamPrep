@@ -10,7 +10,7 @@ class HomePage extends React.Component {
         <p>Hello home page</p>
         <Link to="about" className="btn btn-primary btn-lg">Learn More</Link>
       </div>
-    )
+    );
   }
 }
 
