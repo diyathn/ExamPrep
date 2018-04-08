@@ -10,10 +10,13 @@ class RegisterPage extends React.Component {
 
         this.state = {
             user: {
-                firstName: '',
-                lastName: '',
-                username: '',
-                password: ''
+                name: '',
+                school: '',
+                grade: '',
+                subject: '',
+                email: '',
+                phoneNumber: '',
+                password:''
             },
             submitted: false
         };
@@ -24,6 +27,7 @@ class RegisterPage extends React.Component {
 
     handleChange(event) {
         const { name, value } = event.target;
+        //console.log("name = " + name + " Value = " + value);
         const { user } = this.state;
         this.setState({
             user: {
@@ -39,7 +43,8 @@ class RegisterPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        if (user.firstName && user.lastName && user.username && user.password) {
+        console.log('User Object = ' + user.subject);
+        if (user.name && user.school && user.grade && user.subject && user.email && user.phoneNumber && user.password) {
             dispatch(userActions.register(user));
         }
     }
@@ -51,25 +56,77 @@ class RegisterPage extends React.Component {
             <div className="col-md-6 col-md-offset-3">
                 <h2>Register</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div className={'form-group' + (submitted && !user.firstName ? ' has-error' : '')}>
-                        <label htmlFor="firstName">First Name</label>
-                        <input type="text" className="form-control" name="firstName" value={user.firstName} onChange={this.handleChange} />
-                        {submitted && !user.firstName &&
-                            <div className="help-block">First Name is required</div>
+                    <div className={'form-group' + (submitted && !user.name ? ' has-error' : '')}>
+                        <label htmlFor="name">Name</label>
+                        <input type="text" className="form-control" name="name" value={user.name} onChange={this.handleChange} />
+                        {submitted && !user.name &&
+                            <div className="help-block">Your Name is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.lastName ? ' has-error' : '')}>
-                        <label htmlFor="lastName">Last Name</label>
-                        <input type="text" className="form-control" name="lastName" value={user.lastName} onChange={this.handleChange} />
-                        {submitted && !user.lastName &&
-                            <div className="help-block">Last Name is required</div>
+                    <div className={'form-group' + (submitted && !user.school ? ' has-error' : '')}>
+                        <label htmlFor="school">School</label>
+                        <input type="text" className="form-control" name="school" value={user.school} onChange={this.handleChange} />
+                        {submitted && !user.school &&
+                            <div className="help-block">Your school is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.username ? ' has-error' : '')}>
-                        <label htmlFor="username">Username</label>
-                        <input type="text" className="form-control" name="username" value={user.username} onChange={this.handleChange} />
-                        {submitted && !user.username &&
-                            <div className="help-block">Username is required</div>
+                    <div className={'form-group' + (submitted && !user.grade ? ' has-error' : '')}>
+                        <label htmlFor="grade">Grade</label>
+                        <br/>
+                        <select  className="form-control" name="grade" value={user.grade} onChange={this.handleChange}>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                          <option value="4">Four</option>
+                          <option value="5">Five</option>
+                          <option value="6">Six</option>
+                          <option value="7">Seven</option>
+                          <option value="8">Eight</option>
+                          <option value="9">Nine</option>
+                          <option value="10">Ten</option>
+                          <option value="11">Eleven</option>
+                          <option value="12">Twelve</option>
+                          <option value="13">Thirteen</option>
+                        </select>
+                        {submitted && !user.grade &&
+                            <div className="help-block">Your grade is required</div>
+                        }
+                    </div>
+                    <div>
+                    <label htmlFor="grade">Subject</label>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                    <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
+                        <label htmlFor="al">
+                        <input type="radio" className="form-control" name="subject" value="al" defaultChecked onChange={this.handleChange} />
+                          A/L
+                        </label>
+                        {submitted && !user.subject &&
+                            <div className="help-block">Your subject is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
+                        <label htmlFor="ol">
+                        <input type="radio" className="form-control" name="subject" value="ol" onChange={this.handleChange} />
+                          O/L
+                        </label>
+                        {submitted && !user.subject &&
+                            <div className="help-block">Your subject is required</div>
+                        }
+                    </div>
+                  </div>
+                  </div>
+                    <div className={'form-group' + (submitted && !user.email ? ' has-error' : '')}>
+                        <label htmlFor="email">Email Address</label>
+                        <input type="email" className="form-control" name="email" value={user.email} onChange={this.handleChange} />
+                        {submitted && !user.email &&
+                            <div className="help-block">Your email address is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.phoneNumber ? ' has-error' : '')}>
+                        <label htmlFor="phoneNumber">Phone Number</label>
+                        <input type="phoneNumber" className="form-control" name="phoneNumber" value={user.phoneNumber} onChange={this.handleChange} />
+                        {submitted && !user.phoneNumber &&
+                            <div className="help-block">Your phone number is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
@@ -81,13 +138,13 @@ class RegisterPage extends React.Component {
                     </div>
                     <div className="form-group">
                         <button className="btn btn-primary">Register</button>
-                        {registering && 
+                        {registering &&
                             <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                         }
                         <Link to="/login" className="btn btn-link">Cancel</Link>
                     </div>
-                </form>
-            </div>
+                  </form>
+                  </div>
         );
     }
 }
