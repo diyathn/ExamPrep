@@ -1,2 +1,6 @@
 # ExamPrep
-This is a React.js project which has a sample login and registration modules
+This is a dashboard which develops from React JS which facilitates students to prepare for their examinations.
+
+Technologies:
+  * React JS
+  * Java REST API
