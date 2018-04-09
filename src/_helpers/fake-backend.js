@@ -1,6 +1,6 @@
 // array in local storage for registered users
 let users = JSON.parse(localStorage.getItem('users')) || [];
-    
+
 export function configureFakeBackend() {
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
@@ -76,9 +76,9 @@ export function configureFakeBackend() {
                     let newUser = JSON.parse(opts.body);
 
                     // validation
-                    let duplicateUser = users.filter(user => { return user.username === newUser.username; }).length;
+                    let duplicateUser = users.filter(user => { return user.email === newUser.email; }).length;
                     if (duplicateUser) {
-                        reject('Username "' + newUser.username + '" is already taken');
+                        reject('Email "' + newUser.email + '" is already taken');
                         return;
                     }
 
