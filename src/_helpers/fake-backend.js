@@ -15,7 +15,8 @@ export function configureFakeBackend() {
 
                     // find if any user matches login credentials
                     let filteredUsers = users.filter(user => {
-                        return user.username === params.username && user.password === params.password;
+                      debugger;
+                        return user.name === params.username && user.password === params.password;
                     });
 
                     if (filteredUsers.length) {
@@ -23,9 +24,13 @@ export function configureFakeBackend() {
                         let user = filteredUsers[0];
                         let responseJson = {
                             id: user.id,
-                            username: user.username,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
+                            name: user.name,
+                            school: user.school,
+                            grade: user.grade,
+                            subject: user.subject,
+                            email: user.email,
+                            phoneNumber: user.phoneNumber,
+                            password: user.password,
                             token: 'fake-jwt-token'
                         };
                         resolve({ ok: true, json: () => responseJson });
