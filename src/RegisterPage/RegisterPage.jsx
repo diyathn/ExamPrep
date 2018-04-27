@@ -13,7 +13,10 @@ class RegisterPage extends React.Component {
                 name: '',
                 school: '',
                 grade: '',
-                subject: '',
+                subject: {
+                  category: '',
+                  selection: ''
+                } ,
                 email: '',
                 phoneNumber: '',
                 password:''
@@ -22,19 +25,49 @@ class RegisterPage extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleRadioChange = this.handleRadioChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         const { name, value } = event.target;
-        //console.log("name = " + name + " Value = " + value);
         const { user } = this.state;
+
         this.setState({
             user: {
                 ...user,
                 [name]: value
             }
         });
+        console.log(user);
+    }
+
+    handleRadioChange(event,id) {
+
+      if (id === "ol") {
+        this.setState({
+          checked: false
+
+        })
+      } else {
+        this.setState({
+          checked: true
+
+        })
+      }
+      const { name, value } = event.target;
+      var valueObj = {  category: id,
+                        selection: value
+                     }
+
+      const { user } = this.state;
+
+      this.setState({
+          user: {
+              ...user,
+              [name]: valueObj
+          }
+      });
     }
 
     handleSubmit(event) {
@@ -43,7 +76,7 @@ class RegisterPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        console.log('User Object = ' + user.subject);
+
         if (user.name && user.school && user.grade && user.subject && user.email && user.phoneNumber && user.password) {
             dispatch(userActions.register(user));
         }
@@ -52,6 +85,7 @@ class RegisterPage extends React.Component {
     render() {
         const { registering  } = this.props;
         const { user, submitted } = this.state;
+        const hidden = this.state.checked ? '' : 'hidden';
         return (
             <div className="col-md-6 col-md-offset-3">
                 <h2>Register</h2>
@@ -96,22 +130,30 @@ class RegisterPage extends React.Component {
                     <label htmlFor="grade">Subject</label>
                     <div style={{display: 'flex', flexDirection: 'row'}}>
                     <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
-                        <label htmlFor="al">
-                        <input type="radio" className="form-control" name="subject" value="al" defaultChecked onChange={this.handleChange} />
-                          A/L
+                        <label htmlFor="ol">
+                        <input type="radio" className="form-control" name="subject" value="ol" onChange={(e)=>this.handleRadioChange(e,"ol")} />
+                          O/L
                         </label>
                         {submitted && !user.subject &&
                             <div className="help-block">Your subject is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
-                        <label htmlFor="ol">
-                        <input type="radio" className="form-control" name="subject" value="ol" onChange={this.handleChange} />
-                          O/L
+                        <label htmlFor="al">
+                        <input type="radio" className="form-control" name="subject" value="please select" onChange={(e)=> this.handleRadioChange(e,"")} />
+                          A/L
                         </label>
                         {submitted && !user.subject &&
                             <div className="help-block">Your subject is required</div>
                         }
+                        <div className={ hidden }>
+                        <select  className="form-control" name="subject" onChange={(e)=> this.handleRadioChange(e,"al")}>
+                          <option value="bio">Biology</option>
+                          <option value="maths">Combine Maths</option>
+                          <option value="commerce">Commerce</option>
+                          <option value="arts">Arts</option>
+                        </select>
+                        </div>
                     </div>
                   </div>
                   </div>
@@ -145,6 +187,7 @@ class RegisterPage extends React.Component {
                     </div>
                   </form>
                   </div>
+
         );
     }
 }
