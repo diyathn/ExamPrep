@@ -13,28 +13,71 @@ class RegisterPage extends React.Component {
                 name: '',
                 school: '',
                 grade: '',
-                subject: '',
+                subject: {
+                  category: '',
+                  selection: ''
+                } ,
                 email: '',
                 phoneNumber: '',
                 password:''
             },
-            submitted: false
+            submitted: false,
+            cat_type:''
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleRadioChange = this.handleRadioChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         const { name, value } = event.target;
-        //console.log("name = " + name + " Value = " + value);
         const { user } = this.state;
+
         this.setState({
             user: {
                 ...user,
                 [name]: value
             }
         });
+        console.log(user);
+    }
+
+    handleRadioChange(event,id) {
+
+      if (id === "ol") {
+        this.setState({
+          checked: false,
+          cat_type: 'ol'
+
+        })
+      } else if (id === "al") {
+        this.setState({
+          checked: true,
+          cat_type: 'al'
+
+        })
+      } else if (id === "other"){
+        this.setState({
+          checked: true,
+          cat_type: 'other'
+
+        })
+      }
+      const { name, value } = event.target;
+      var valueObj = {  category: id,
+                        selection: value
+                     }
+
+      const { user } = this.state;
+      console.log(this.state);
+
+      this.setState({
+          user: {
+              ...user,
+              [name]: valueObj
+          }
+      });
     }
 
     handleSubmit(event) {
@@ -43,8 +86,8 @@ class RegisterPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        console.log('User Object = ' + user.subject);
-        if (user.name && user.school && user.grade && user.subject && user.email && user.phoneNumber && user.password) {
+
+        if (user.name && user.school && user.subject && user.email && user.phoneNumber && user.password) {
             dispatch(userActions.register(user));
         }
     }
@@ -52,6 +95,27 @@ class RegisterPage extends React.Component {
     render() {
         const { registering  } = this.props;
         const { user, submitted } = this.state;
+
+        var hideOl;
+        var hideAl;
+        var hideOthr;
+        if (this.state.cat_type === 'al') {
+          hideAl = '';
+          hideOl = 'hidden';
+          hideOthr = 'hidden';
+        } else if (this.state.cat_type === 'ol') {
+          hideOl = '';
+          hideOthr = 'hidden';
+          hideAl = 'hidden';
+        } else if (this.state.cat_type === 'other'){
+          hideOthr = '';
+          hideOl = 'hidden';
+          hideAl = 'hidden';
+        } else {
+          hideOl = 'hidden';
+          hideOthr = 'hidden';
+          hideAl = 'hidden';
+        }
         return (
             <div className="col-md-6 col-md-offset-3">
                 <h2>Register</h2>
@@ -70,48 +134,62 @@ class RegisterPage extends React.Component {
                             <div className="help-block">Your school is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.grade ? ' has-error' : '')}>
-                        <label htmlFor="grade">Grade</label>
-                        <br/>
-                        <select  className="form-control" name="grade" value={user.grade} onChange={this.handleChange}>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                          <option value="4">Four</option>
-                          <option value="5">Five</option>
+                    <div>
+                    <label htmlFor="grade">Subject</label>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                      <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
+                          <label htmlFor="al">
+                          <input type="radio" className="form-control" name="subject" value="please select" onChange={(e)=> this.handleRadioChange(e,"other")} />
+                            Grade 5 or below
+                          </label>
+                          {submitted && !user.subject &&
+                              <div className="help-block">Your subject is required</div>
+                          }
+                          <div className={ hideOthr }>
+                          <select  className="form-control" name="subject" onChange={(e)=> this.handleRadioChange(e,"other")}>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                            <option value="4">Four</option>
+                            <option value="5">Five</option>
+                          </select>
+                          </div>
+                      </div>
+                    <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
+                        <label htmlFor="ol">
+                        <input type="radio" className="form-control" name="subject" value="ol" onChange={(e)=>this.handleRadioChange(e,"ol")} />
+                          O/L
+                        </label>
+                        {submitted && !user.subject &&
+                            <div className="help-block">Your subject is required</div>
+                        }
+                        <div className={ hideOl }>
+                        <select  className="form-control" name="subject" onChange={(e)=> this.handleRadioChange(e,"ol")}>
                           <option value="6">Six</option>
                           <option value="7">Seven</option>
                           <option value="8">Eight</option>
                           <option value="9">Nine</option>
                           <option value="10">Ten</option>
                           <option value="11">Eleven</option>
-                          <option value="12">Twelve</option>
-                          <option value="13">Thirteen</option>
                         </select>
-                        {submitted && !user.grade &&
-                            <div className="help-block">Your grade is required</div>
-                        }
+                        </div>
                     </div>
-                    <div>
-                    <label htmlFor="grade">Subject</label>
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
                     <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
                         <label htmlFor="al">
-                        <input type="radio" className="form-control" name="subject" value="al" defaultChecked onChange={this.handleChange} />
+                        <input type="radio" className="form-control" name="subject" value="please select" onChange={(e)=> this.handleRadioChange(e,"al")} />
                           A/L
                         </label>
                         {submitted && !user.subject &&
                             <div className="help-block">Your subject is required</div>
                         }
-                    </div>
-                    <div className={'form-group' + (submitted && !user.subject ? ' has-error' : '')} style={{marginRight: '100px'}}>
-                        <label htmlFor="ol">
-                        <input type="radio" className="form-control" name="subject" value="ol" onChange={this.handleChange} />
-                          O/L
-                        </label>
-                        {submitted && !user.subject &&
-                            <div className="help-block">Your subject is required</div>
-                        }
+                        <div className={ hideAl }>
+                        <select  className="form-control" name="subject" onChange={(e)=> this.handleRadioChange(e,"al")}>
+                          <option value="bio">Biology</option>
+                          <option value="maths">Combine Maths</option>
+                          <option value="commerce">Commerce</option>
+                          <option value="arts">Arts</option>
+                        </select>
+                        </div>
                     </div>
                   </div>
                   </div>
@@ -145,6 +223,7 @@ class RegisterPage extends React.Component {
                     </div>
                   </form>
                   </div>
+
         );
     }
 }
